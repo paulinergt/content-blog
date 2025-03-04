@@ -1,6 +1,3 @@
-# This pipeline was inspired by Open WebUI example pipeline
-# https://github.com/open-webui/pipelines/blob/main/examples/pipelines/rag/llamaindex_ollama_github_pipeline.py
-
 """
 title: Llama Index Ollama Github Pipeline
 author: paulinergt
@@ -10,6 +7,10 @@ license: MIT
 description: A pipeline for retrieving relevant information from a knowledge base using the Llama Index library with Ollama embeddings from a GitHub repository.
 requirements: llama-index, llama-index-llms-ollama, llama-index-embeddings-ollama, llama-index-readers-github, pydantic
 """
+
+# This pipeline was inspired by Open WebUI example pipeline
+# https://github.com/open-webui/pipelines/blob/main/examples/pipelines/rag/llamaindex_ollama_github_pipeline.py
+
 
 from typing import List, Union, Generator, Iterator
 from schemas import OpenAIChatMessage
