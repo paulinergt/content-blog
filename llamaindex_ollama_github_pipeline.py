@@ -36,7 +36,7 @@ class Pipeline:
         self.valves = self.Valves(**{"EMBEDDING_MODEL_NAME":os.getenv("EMBEDDING_MODEL_NAME","nomic-embed-text"),
                                      "OLLAMA_BASE_URL":os.getenv("OLLAMA_BASE_URL","http://ollama:80"),
                                      "MODEL_NAME":os.getenv("MODEL_NAME","deepseek-r1:7b"),
-                                     "GITHUB_TOKEN":os.getenv("GITHUB_TOKEN","dummytoken"),
+                                     "GITHUB_TOKEN":os.getenv("GITHUB_TOKEN"),
                                      "GITHUB_REPO_OWNER":os.getenv("GITHUB_REPO_OWNER","open-webui"),
                                      "GITHUB_REPO":os.getenv("GITHUB_REPO","docs"),
                                      "GITHUB_REPO_BRANCH":os.getenv("GITHUB_REPO_BRANCH","main"),
