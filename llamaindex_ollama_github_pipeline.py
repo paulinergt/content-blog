@@ -8,9 +8,8 @@ description: A pipeline for retrieving relevant information from a knowledge bas
 requirements: llama-index, llama-index-llms-ollama, llama-index-embeddings-ollama, llama-index-readers-github, pydantic
 """
 
-# This pipeline was inspired by Open WebUI example pipeline
-# https://github.com/open-webui/pipelines/blob/main/examples/pipelines/rag/llamaindex_ollama_github_pipeline.py
-
+# This code is based on a Python example pipeline from Open WebUI Pipelines. The original implementation can be found at:   
+# https://github.com/open-webui/pipelines/blob/main/examples/pipelines/rag/llamaindex_ollama_github_pipeline.py  
 
 from typing import List, Union, Generator, Iterator
 from schemas import OpenAIChatMessage
@@ -47,53 +46,61 @@ class Pipeline:
         from llama_index.llms.ollama import Ollama
         from llama_index.core import VectorStoreIndex, Settings
         from llama_index.readers.github import GithubRepositoryReader, GithubClient
+        from llama_index.core import SimpleDirectoryReader
 
         Settings.embed_model = OllamaEmbedding(
             model_name=self.valves.EMBEDDING_MODEL_NAME,
             base_url=self.valves.OLLAMA_BASE_URL,
         )
-        Settings.llm = Ollama(model=self.valves.MODEL_NAME)
+        print("ACCES AU MODÈLE D'EMBEDDING OK")
+
+        Settings.llm = Ollama(model=self.valves.MODEL_NAME,
+                             base_url=self.valves.OLLAMA_BASE_URL,)
+        print("ACCES AU LLM OK")
 
         global index, documents
 
-        github_token = self.valves.GITHUB_TOKEN
-        owner = self.valves.GITHUB_REPO_OWNER
-        repo = self.valves.GITHUB_REPO
-        branch = self.valves.GITHUB_REPO_BRANCH
+        # github_token = self.valves.GITHUB_TOKEN
+        # owner = self.valves.GITHUB_REPO_OWNER
+        # repo = self.valves.GITHUB_REPO
+        # branch = self.valves.GITHUB_REPO_BRANCH
 
-        github_client = GithubClient(github_token=github_token, verbose=True)
+        # github_client = GithubClient(github_token=github_token, verbose=True)
 
-        reader = GithubRepositoryReader(
-            github_client=github_client,
-            owner=owner,
-            repo=repo,
-            use_parser=False,
-            verbose=False,
-            filter_file_extensions=(
-                [
-                    ".png",
-                    ".jpg",
-                    ".jpeg",
-                    ".gif",
-                    ".svg",
-                    ".ico",
-                    "json",
-                    ".ipynb",
-                ],
-                GithubRepositoryReader.FilterType.EXCLUDE,
-            ),
-        )
+        # reader = GithubRepositoryReader(
+        #     github_client=github_client,
+        #     owner=owner,
+        #     repo=repo,
+        #     use_parser=False,
+        #     verbose=False,
+        #     filter_file_extensions=(
+        #         [
+        #             ".png",
+        #             ".jpg",
+        #             ".jpeg",
+        #             ".gif",
+        #             ".svg",
+        #             ".ico",
+        #             "json",
+        #             ".ipynb",
+        #         ],
+        #         GithubRepositoryReader.FilterType.EXCLUDE,
+        #     ),
+        # )
 
-        loop = asyncio.new_event_loop()
+        # loop = asyncio.new_event_loop()
 
-        reader._loop = loop
+        # reader._loop = loop
 
-        try:
-            # Load data from the branch
-            self.documents = await asyncio.to_thread(reader.load_data, branch=branch)
-            self.index = VectorStoreIndex.from_documents(self.documents)
-        finally:
-            loop.close()
+        # try:
+        #     # Load data from the branch
+        #     self.documents = await asyncio.to_thread(reader.load_data, branch=branch)
+        #     self.index = VectorStoreIndex.from_documents(self.documents)
+        # finally:
+        #     loop.close()
+
+        self.documents = SimpleDirectoryReader("/app/backend/data").load_data()
+        self.index = VectorStoreIndex.from_documents(self.documents)
 
         print(self.documents)
         print(self.index)
